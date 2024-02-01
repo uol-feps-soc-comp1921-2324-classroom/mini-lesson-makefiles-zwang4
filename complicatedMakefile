@@ -1,0 +1,148 @@
+######################################
+This is a massively overcomplicated makefile which I needed for last year's course
+as it involved compiling multiple executables with separate main() functions.
+This is what a makefile can look like in that sort of situation..
+
+It is much less generic as I needed to keep my SRCS separate per exe, and there
+were lots of them..
+
+YOU DO NOT NEED TO UNDERSTAND THIS - EXAMPLE ONLY
+#######################################
+
+
+
+
+# I need these on everything..
+REQ = ioUtils.o structs.o errors.o compressionTools.o
+
+# my utils
+EBC2PGM = ebc2pgm.o ${REQ}
+PGMBLOCK = pgmBlock.o ${REQ}
+PGM2EBF = pgm2ebf.o ${REQ}
+PGM2EBC = pgm2ebc.o ${REQ}
+EBF2PGM = ebf2pgm.o ${REQ}
+EBU2PGM = ebu2pgm.o ${REQ}
+
+# exes for assignment 1
+EBFECHO = ebfEcho.o ${REQ}
+EBFCOMP = ebfComp.o ${REQ}
+
+EBF2EBU = ebf2ebu.o ${REQ}
+EBU2EBF = ebu2ebf.o ${REQ}
+
+EBUECHO = ebuEcho.o ${REQ}
+EBUCOMP = ebuComp.o ${REQ}
+
+EBU2EBC = ebu2ebc.o ${REQ}
+EBC2EBU = ebc2ebu.o ${REQ}
+
+EBCECHO = ebcEcho.o ${REQ}
+EBCCOMP = ebcComp.o ${REQ}
+
+# compression files
+EBCBLOCK = ebcBlock.o ${REQ}
+EBCUNBLOCK = ebcUnblock.o ${REQ}
+EBCR32 = ebcR32.o ${REQ}
+EBCE32 = ebcE32.o ${REQ}
+EBCR128 = ebcR128.o ${REQ}
+EBCE128 = ebcE128.o ${REQ}
+
+
+TESTER = tester.o ${REQ}
+
+# pgm utils
+EXE = pgm2ebf pgm2ebc ebf2pgm ebc2pgm ebu2pgm pgmBlock
+
+# the files for the assignment 1 functions.
+ASSIGNMENT1 = ebfEcho ebfComp ebf2ebu ebu2ebf ebu2ebc ebc2ebu ebcEcho ebcComp ebuEcho ebuComp
+
+# generic build details
+
+CC     = gcc
+CFLAGS = -std=c99 -Wall
+
+# including my pgm utilities
+all: ${EXE} ${ASSIGNMENT1}
+
+# generalised rule
+%.o: %.c structs.h ioUtils.h errors.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+# build executable: type 'make'
+
+pgm2ebf: ${PGM2EBF}
+	$(CC) $(CCFLAGS) $^ -o $@
+
+ebf2pgm: $(EBF2PGM)
+	$(CC) $(CCFLAGS) $^ -o $@
+
+ebu2pgm: $(EBU2PGM)
+	$(CC) $(CCFLAGS) $^ -o $@
+
+ebfEcho:  $(EBFECHO)
+	$(CC) $(CCFLAGS) $^ -o $@
+
+ebfComp:  $(EBFCOMP)
+	$(CC) $(CCFLAGS) $^ -o $@
+
+ebf2ebu:  $(EBF2EBU)
+	$(CC) $(CCFLAGS) $^ -o $@
+
+ebu2ebf:  $(EBU2EBF)
+	$(CC) $(CCFLAGS) $^ -o $@
+
+ebu2ebc:  $(EBU2EBC)
+	$(CC) $(CCFLAGS) $^ -o $@
+
+ebc2ebu:  $(EBC2EBU)
+	$(CC) $(CCFLAGS) $^ -o $@
+
+ebc2pgm: $(EBC2PGM)
+	$(CC) $(CCFLAGS) $^ -o $@
+
+pgmBlock: $(PGMBLOCK)
+	$(CC) $(CCFLAGS) $^ -o $@
+
+ebcEcho: ${EBCECHO}
+	$(CC) $(CCFLAGS) $^ -o $@
+
+pgm2ebc: ${PGM2EBC}
+	$(CC) $(CCFLAGS) $^ -o $@
+
+ebcComp: ${EBCCOMP}
+	$(CC) $(CCFLAGS) $^ -o $@
+
+ebuEcho: ${EBUECHO}
+	$(CC) $(CCFLAGS) $^ -o $@
+
+ebuComp: ${EBUCOMP}
+	$(CC) $(CCFLAGS) $^ -o $@
+
+ebcBlock: ${EBCBLOCK}
+	$(CC) $(CCFLAGS) $^ -o $@ -lm
+
+ebcUnblock: ${EBCUNBLOCK}
+	$(CC) $(CCFLAGS) $^ -o $@ -lm
+
+test: ${TESTER}
+	$(CC) $(CCFLAGS) $^ -o $@ -lm
+
+ebcR32: ${EBCR32}
+	$(CC) $(CCFLAGS) $^ -o $@ -lm
+
+ebcE32: ${EBCE32}
+	$(CC) $(CCFLAGS) $^ -o $@ -lm
+
+ebcR128: ${EBCR128}
+	$(CC) $(CCFLAGS) $^ -o $@ -lm
+
+ebcE128: ${EBCE128}
+	$(CC) $(CCFLAGS) $^ -o $@ -lm
+
+# clean up and remove object code and executable: type 'make clean'
+clean:
+	rm -f *.o $(EXE) ${ASSIGNMENT1}
+
+# tidy up the .o files
+tidy:
+	rm -f *.o
